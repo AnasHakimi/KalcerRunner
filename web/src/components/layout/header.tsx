@@ -1,13 +1,16 @@
 "use client"
 
 import Link from "next/link"
-import { MapPin, Users, Menu, X } from "lucide-react"
+import { Users, Menu, X, LogOut, User, Settings } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
+import { useAuth } from "@/context/auth-context"
 
 export function Header() {
     const [isMenuOpen, setIsMenuOpen] = useState(false)
+    const [isUserMenuOpen, setIsUserMenuOpen] = useState(false)
+    const { user, isAuthenticated, login, logout, isLoading } = useAuth()
 
     return (
         <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -40,10 +43,71 @@ export function Header() {
 
                 {/* Desktop Actions */}
                 <div className="hidden md:flex items-center space-x-2">
-                    <Button variant="ghost" size="sm">
-                        Log In
-                    </Button>
-                    <Button size="sm">Get Started</Button>
+                    {isAuthenticated && user ? (
+                        <div className="relative">
+                            <Button
+                                variant="ghost"
+                                className="flex items-center gap-2 pl-2 pr-4"
+                                onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
+                            >
+                                <div className="h-8 w-8 rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold">
+                                    {user.avatar}
+                                </div>
+                                <span className="text-sm font-medium">{user.name}</span>
+                            </Button>
+
+                            {/* User Dropdown */}
+                            <AnimatePresence>
+                                {isUserMenuOpen && (
+                                    <motion.div
+                                        initial={{ opacity: 0, y: 10 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        exit={{ opacity: 0, y: 10 }}
+                                        className="absolute right-0 mt-2 w-48 bg-card border rounded-lg shadow-lg py-1 z-50"
+                                    >
+                                        <div className="px-4 py-2 border-b">
+                                            <p className="text-xs text-muted-foreground">Signed in as</p>
+                                            <p className="text-sm font-medium truncate">{user.email}</p>
+                                        </div>
+                                        <button className="w-full text-left px-4 py-2 text-sm hover:bg-muted flex items-center gap-2">
+                                            <User className="w-4 h-4" /> Profile
+                                        </button>
+                                        <button className="w-full text-left px-4 py-2 text-sm hover:bg-muted flex items-center gap-2">
+                                            <Settings className="w-4 h-4" /> Settings
+                                        </button>
+                                        <div className="border-t my-1"></div>
+                                        <button
+                                            onClick={() => {
+                                                logout()
+                                                setIsUserMenuOpen(false)
+                                            }}
+                                            className="w-full text-left px-4 py-2 text-sm hover:bg-destructive/10 text-destructive flex items-center gap-2"
+                                        >
+                                            <LogOut className="w-4 h-4" /> Log Out
+                                        </button>
+                                    </motion.div>
+                                )}
+                            </AnimatePresence>
+                        </div>
+                    ) : (
+                        <>
+                            <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => login()}
+                                disabled={isLoading}
+                            >
+                                {isLoading ? "..." : "Log In"}
+                            </Button>
+                            <Button
+                                size="sm"
+                                onClick={() => login()}
+                                disabled={isLoading}
+                            >
+                                Get Started
+                            </Button>
+                        </>
+                    )}
                 </div>
 
                 {/* Mobile Menu Button */}
@@ -84,10 +148,53 @@ export function Header() {
                                 </Link>
                             </nav>
                             <div className="flex flex-col space-y-2 pt-4 border-t">
-                                <Button variant="ghost" size="sm" className="justify-start px-0">
-                                    Log In
-                                </Button>
-                                <Button size="sm">Get Started</Button>
+                                {isAuthenticated && user ? (
+                                    <>
+                                        <div className="flex items-center gap-3 px-2 py-2">
+                                            <div className="h-8 w-8 rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold">
+                                                {user.avatar}
+                                            </div>
+                                            <div>
+                                                <p className="text-sm font-medium">{user.name}</p>
+                                                <p className="text-xs text-muted-foreground">{user.email}</p>
+                                            </div>
+                                        </div>
+                                        <Button
+                                            variant="destructive"
+                                            size="sm"
+                                            className="justify-start"
+                                            onClick={() => {
+                                                logout()
+                                                setIsMenuOpen(false)
+                                            }}
+                                        >
+                                            <LogOut className="w-4 h-4 mr-2" /> Log Out
+                                        </Button>
+                                    </>
+                                ) : (
+                                    <>
+                                        <Button
+                                            variant="ghost"
+                                            size="sm"
+                                            className="justify-start px-0"
+                                            onClick={() => {
+                                                login()
+                                                setIsMenuOpen(false)
+                                            }}
+                                        >
+                                            Log In
+                                        </Button>
+                                        <Button
+                                            size="sm"
+                                            onClick={() => {
+                                                login()
+                                                setIsMenuOpen(false)
+                                            }}
+                                        >
+                                            Get Started
+                                        </Button>
+                                    </>
+                                )}
                             </div>
                         </div>
                     </motion.div>

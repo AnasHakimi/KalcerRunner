@@ -40,7 +40,7 @@ export function Footer() {
                                 <Link href="/find-spots" className="hover:text-primary transition-colors">Find Spots</Link>
                             </li>
                             <li>
-                                <Link href="#" className="hover:text-primary transition-colors">Events (Coming Soon)</Link>
+                                <Link href="#" className="hover:text-primary transition-colors">About Us</Link>
                             </li>
                         </ul>
                     </div>
@@ -80,11 +80,9 @@ export function Footer() {
 
                 {/* Bottom Bar */}
                 <div className="mt-12 pt-8 border-t flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-muted-foreground">
-                    <p>&copy; {new Date().getFullYear()} Kalcer Runner. Open source under AGPL license.</p>
+                    <p>&copy; {new Date().getFullYear()} Kalcer Runner.</p>
                     <div className="flex items-center gap-1">
-                        <span>Made with</span>
-                        <Heart className="h-3 w-3 text-red-500 fill-current" />
-                        <span>by the running community</span>
+                        <span> Built for runners, by runners.</span>
                     </div>
                 </div>
             </div>

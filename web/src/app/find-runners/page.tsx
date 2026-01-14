@@ -6,9 +6,38 @@ import { runners } from "@/lib/data"
 import { UserPlus, MapPin, Gauge, List, Map as MapIcon } from "lucide-react"
 import { useState } from "react"
 import { cn } from "@/lib/utils"
+import { useAuth } from "@/context/auth-context"
+import { toast } from "sonner"
 
 export default function FindRunnersPage() {
     const [activeTab, setActiveTab] = useState<"list" | "map">("list")
+    const { isAuthenticated, login } = useAuth()
+    const [pendingConnections, setPendingConnections] = useState<string[]>([])
+
+    const handleConnect = (runnerId: string, runnerName: string) => {
+        if (!isAuthenticated) {
+            toast.error("Please log in to connect with runners", {
+                action: {
+                    label: "Log In",
+                    onClick: () => login()
+                }
+            })
+            return
+        }
+
+        // Mock API call simulation
+        toast.promise(
+            new Promise((resolve) => setTimeout(resolve, 1000)),
+            {
+                loading: 'Sending request...',
+                success: () => {
+                    setPendingConnections(prev => [...prev, runnerId])
+                    return `Request sent to ${runnerName}!`
+                },
+                error: 'Failed to send request',
+            }
+        )
+    }
 
     const mapMarkers = runners.map(r => ({
         id: r.id,
@@ -49,40 +78,52 @@ export default function FindRunnersPage() {
                     <p className="text-muted-foreground">Find buddies near you.</p>
                 </div>
                 <div className="space-y-4 pb-16 lg:pb-0">
-                    {runners.map((runner) => (
-                        <div key={runner.id} className="bg-card text-card-foreground p-4 rounded-xl border shadow-sm hover:shadow-md transition-shadow">
-                            <div className="flex items-start justify-between">
-                                <div className="flex items-center space-x-3">
-                                    <div className="h-10 w-10 rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold">
-                                        {runner.avatar}
-                                    </div>
-                                    <div>
-                                        <h3 className="font-semibold">{runner.name}</h3>
-                                        <div className="text-xs text-muted-foreground flex items-center gap-2">
-                                            <MapPin className="w-3 h-3" /> 0.5km away
+                    {runners.map((runner) => {
+                        const isPending = pendingConnections.includes(runner.id.toString())
+
+                        return (
+                            <div key={runner.id} className="bg-card text-card-foreground p-4 rounded-xl border shadow-sm hover:shadow-md transition-shadow">
+                                <div className="flex items-start justify-between">
+                                    <div className="flex items-center space-x-3">
+                                        <div className="h-10 w-10 rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold">
+                                            {runner.avatar}
+                                        </div>
+                                        <div>
+                                            <h3 className="font-semibold">{runner.name}</h3>
+                                            <div className="text-xs text-muted-foreground flex items-center gap-2">
+                                                <MapPin className="w-3 h-3" /> 0.5km away
+                                            </div>
                                         </div>
                                     </div>
+                                    <Button size="sm" variant="outline" className="h-8 w-8 p-0 rounded-full">
+                                        <UserPlus className="h-4 w-4" />
+                                    </Button>
                                 </div>
-                                <Button size="sm" variant="outline" className="h-8 w-8 p-0 rounded-full">
-                                    <UserPlus className="h-4 w-4" />
+                                <div className="mt-4 grid grid-cols-2 gap-2 text-sm">
+                                    <div className="bg-secondary p-2 rounded-md flex items-center gap-2">
+                                        <Gauge className="w-4 h-4 text-primary" />
+                                        <span>{runner.pace}</span>
+                                    </div>
+                                    <div className="bg-secondary p-2 rounded-md flex items-center gap-2">
+                                        <span className="font-medium text-xs uppercase tracking-wide text-muted-foreground/50">Target</span>
+                                        <span>{runner.distance}</span>
+                                    </div>
+                                </div>
+                                <p className="mt-3 text-sm text-muted-foreground line-clamp-2">
+                                    {runner.bio}
+                                </p>
+                                <Button
+                                    className="w-full mt-4"
+                                    size="sm"
+                                    variant={isPending ? "secondary" : "default"}
+                                    disabled={isPending}
+                                    onClick={() => handleConnect(runner.id.toString(), runner.name)}
+                                >
+                                    {isPending ? "Request Sent" : "Connect"}
                                 </Button>
                             </div>
-                            <div className="mt-4 grid grid-cols-2 gap-2 text-sm">
-                                <div className="bg-secondary p-2 rounded-md flex items-center gap-2">
-                                    <Gauge className="w-4 h-4 text-primary" />
-                                    <span>{runner.pace}</span>
-                                </div>
-                                <div className="bg-secondary p-2 rounded-md flex items-center gap-2">
-                                    <span className="font-medium text-xs uppercase tracking-wide text-muted-foreground/50">Target</span>
-                                    <span>{runner.distance}</span>
-                                </div>
-                            </div>
-                            <p className="mt-3 text-sm text-muted-foreground line-clamp-2">
-                                {runner.bio}
-                            </p>
-                            <Button className="w-full mt-4" size="sm">Connect</Button>
-                        </div>
-                    ))}
+                        )
+                    })}
                 </div>
             </div>
 
