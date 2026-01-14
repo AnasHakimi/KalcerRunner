@@ -3,9 +3,13 @@
 import Map from "@/components/map"
 import { Button } from "@/components/ui/button"
 import { runners } from "@/lib/data"
-import { UserPlus, MapPin, Gauge } from "lucide-react"
+import { UserPlus, MapPin, Gauge, List, Map as MapIcon } from "lucide-react"
+import { useState } from "react"
+import { cn } from "@/lib/utils"
 
 export default function FindRunnersPage() {
+    const [activeTab, setActiveTab] = useState<"list" | "map">("list")
+
     const mapMarkers = runners.map(r => ({
         id: r.id,
         position: r.location as [number, number],
@@ -14,14 +18,37 @@ export default function FindRunnersPage() {
     }))
 
     return (
-        <div className="flex h-[calc(100vh-3.5rem)] flex-col lg:flex-row">
+        <div className="flex h-[calc(100vh-3.5rem)] flex-col lg:flex-row relative">
+            {/* Mobile Tab Switcher */}
+            <div className="lg:hidden absolute bottom-6 left-1/2 -translate-x-1/2 z-30 bg-background/80 backdrop-blur rounded-full shadow-lg border p-1 flex">
+                <Button
+                    variant={activeTab === "list" ? "default" : "ghost"}
+                    size="sm"
+                    className="rounded-full px-6"
+                    onClick={() => setActiveTab("list")}
+                >
+                    <List className="w-4 h-4 mr-2" /> List
+                </Button>
+                <Button
+                    variant={activeTab === "map" ? "default" : "ghost"}
+                    size="sm"
+                    className="rounded-full px-6"
+                    onClick={() => setActiveTab("map")}
+                >
+                    <MapIcon className="w-4 h-4 mr-2" /> Map
+                </Button>
+            </div>
+
             {/* Sidebar / List View */}
-            <div className="w-full lg:w-1/3 p-4 overflow-auto border-r bg-muted/10 h-1/2 lg:h-full">
+            <div className={cn(
+                "w-full lg:w-1/3 p-4 overflow-auto border-r bg-muted/10 h-full transition-opacity absolute lg:relative",
+                activeTab === "list" ? "z-10 opacity-100" : "z-0 opacity-0 lg:opacity-100 lg:z-auto"
+            )}>
                 <div className="mb-4">
                     <h1 className="text-2xl font-bold">Runner Finder</h1>
                     <p className="text-muted-foreground">Find buddies near you.</p>
                 </div>
-                <div className="space-y-4">
+                <div className="space-y-4 pb-16 lg:pb-0">
                     {runners.map((runner) => (
                         <div key={runner.id} className="bg-card text-card-foreground p-4 rounded-xl border shadow-sm hover:shadow-md transition-shadow">
                             <div className="flex items-start justify-between">
@@ -46,7 +73,7 @@ export default function FindRunnersPage() {
                                     <span>{runner.pace}</span>
                                 </div>
                                 <div className="bg-secondary p-2 rounded-md flex items-center gap-2">
-                                    <span className="font-medium text-xs uppercase tracking-wide">Target</span>
+                                    <span className="font-medium text-xs uppercase tracking-wide text-muted-foreground/50">Target</span>
                                     <span>{runner.distance}</span>
                                 </div>
                             </div>
@@ -60,7 +87,10 @@ export default function FindRunnersPage() {
             </div>
 
             {/* Map View */}
-            <div className="w-full lg:w-2/3 h-1/2 lg:h-full relative z-0">
+            <div className={cn(
+                "w-full lg:w-2/3 h-full absolute lg:relative z-0",
+                activeTab === "map" ? "opacity-100 z-20" : "opacity-0 lg:opacity-100 lg:z-auto pointer-events-none lg:pointer-events-auto"
+            )}>
                 <Map markers={mapMarkers} className="h-full w-full" zoom={12} />
             </div>
         </div>

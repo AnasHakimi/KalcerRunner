@@ -18,7 +18,6 @@ const DefaultIcon = L.icon({
     shadowSize: [41, 41]
 })
 
-// @ts-ignore
 L.Marker.prototype.options.icon = DefaultIcon
 
 interface MapProps {
