@@ -42,7 +42,7 @@ export default function FindSpotsPage() {
 
             {/* Sidebar / List View */}
             <div className={cn(
-                "w-full lg:w-1/3 p-4 overflow-auto border-r bg-muted/10 h-full transition-opacity absolute lg:relative",
+                "w-full lg:w-[400px] lg:flex-none p-4 overflow-auto border-r bg-muted/10 h-full transition-opacity absolute lg:relative",
                 activeTab === "list" ? "z-10 opacity-100" : "z-0 opacity-0 lg:opacity-100 lg:z-auto"
             )}>
                 <div className="mb-4">
@@ -79,7 +79,7 @@ export default function FindSpotsPage() {
 
             {/* Map View */}
             <div className={cn(
-                "w-full lg:w-2/3 h-full absolute lg:relative z-0",
+                "w-full lg:flex-1 h-full absolute lg:relative z-0",
                 activeTab === "map" ? "opacity-100 z-20" : "opacity-0 lg:opacity-100 lg:z-auto pointer-events-none lg:pointer-events-auto"
             )}>
                 <Map markers={mapMarkers} className="h-full w-full" zoom={12} />
