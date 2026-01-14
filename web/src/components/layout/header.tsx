@@ -9,7 +9,6 @@ import { useAuth } from "@/context/auth-context"
 import { NotificationsPopover } from "@/components/notifications-popover" // Added Import
 
 export function Header() {
-    const [isMenuOpen, setIsMenuOpen] = useState(false)
     const [isUserMenuOpen, setIsUserMenuOpen] = useState(false)
     const { user, isAuthenticated, login, logout, isLoading } = useAuth()
 
@@ -118,72 +117,7 @@ export function Header() {
                         </div>
                     )}
                 </div>
-
-                {/* Mobile Menu Button */}
-                <Button
-                    variant="ghost"
-                    size="icon"
-                    className="md:hidden"
-                    onClick={() => setIsMenuOpen(!isMenuOpen)}
-                >
-                    {isMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-                </Button>
             </div>
-
-            {/* Mobile Menu Overlay */}
-            <AnimatePresence>
-                {isMenuOpen && (
-                    <motion.div
-                        initial={{ opacity: 0, height: 0 }}
-                        animate={{ opacity: 1, height: "auto" }}
-                        exit={{ opacity: 0, height: 0 }}
-                        className="md:hidden border-b bg-background overflow-hidden"
-                    >
-                        <div className="container py-4 flex flex-col space-y-4">
-                            <nav className="flex flex-col space-y-4">
-                                <Link
-                                    href="/find-runners"
-                                    className="text-sm font-medium transition-colors hover:text-primary"
-                                    onClick={() => setIsMenuOpen(false)}
-                                >
-                                    Find Runners
-                                </Link>
-                                <Link
-                                    href="/find-spots"
-                                    className="text-sm font-medium transition-colors hover:text-primary"
-                                    onClick={() => setIsMenuOpen(false)}
-                                >
-                                    Find Spots
-                                </Link>
-                            </nav>
-                            {!isAuthenticated && (
-                                <div className="flex flex-col space-y-2 pt-4 border-t">
-                                    <Button
-                                        variant="ghost"
-                                        size="sm"
-                                        className="justify-start px-0"
-                                        onClick={() => {
-                                            login()
-                                            setIsMenuOpen(false)
-                                        }}
-                                    >
-                                        Log In
-                                    </Button>
-                                    <Button
-                                        size="sm"
-                                        onClick={() => {
-                                            login()
-                                            setIsMenuOpen(false)
-                                        }}
-                                    >
-                                        Get Started
-                                    </Button>
-                                </div>
-                            )}
-                        </div>
-                    </motion.div>
-                )}
-            </AnimatePresence>
         </header>
     )
 }
