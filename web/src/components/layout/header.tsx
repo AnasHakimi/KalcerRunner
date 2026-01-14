@@ -41,8 +41,8 @@ export function Header() {
                     </nav>
                 </div>
 
-                {/* Desktop Actions */}
-                <div className="hidden md:flex items-center space-x-2">
+                {/* Actions */}
+                <div className="flex items-center space-x-2">
                     {isAuthenticated && user ? (
                         <div className="relative">
                             <Button
@@ -53,7 +53,7 @@ export function Header() {
                                 <div className="h-8 w-8 rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold">
                                     {user.avatar}
                                 </div>
-                                <span className="text-sm font-medium">{user.name}</span>
+                                <span className="text-sm font-medium hidden md:inline">{user.name}</span>
                             </Button>
 
                             {/* User Dropdown */}
@@ -95,7 +95,7 @@ export function Header() {
                             </AnimatePresence>
                         </div>
                     ) : (
-                        <>
+                        <div className="hidden md:flex items-center space-x-2">
                             <Button
                                 variant="ghost"
                                 size="sm"
@@ -111,7 +111,7 @@ export function Header() {
                             >
                                 Get Started
                             </Button>
-                        </>
+                        </div>
                     )}
                 </div>
 
@@ -151,65 +151,31 @@ export function Header() {
                                 >
                                     Find Spots
                                 </Link>
-                                {isAuthenticated && (
-                                    <Link
-                                        href="/friends"
-                                        className="text-sm font-medium transition-colors hover:text-primary"
-                                        onClick={() => setIsMenuOpen(false)}
-                                    >
-                                        Friends
-                                    </Link>
-                                )}
                             </nav>
-                            <div className="flex flex-col space-y-2 pt-4 border-t">
-                                {isAuthenticated && user ? (
-                                    <>
-                                        <div className="flex items-center gap-3 px-2 py-2">
-                                            <div className="h-8 w-8 rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold">
-                                                {user.avatar}
-                                            </div>
-                                            <div>
-                                                <p className="text-sm font-medium">{user.name}</p>
-                                                <p className="text-xs text-muted-foreground">{user.email}</p>
-                                            </div>
-                                        </div>
-                                        <Button
-                                            variant="destructive"
-                                            size="sm"
-                                            className="justify-start"
-                                            onClick={() => {
-                                                logout()
-                                                setIsMenuOpen(false)
-                                            }}
-                                        >
-                                            <LogOut className="w-4 h-4 mr-2" /> Log Out
-                                        </Button>
-                                    </>
-                                ) : (
-                                    <>
-                                        <Button
-                                            variant="ghost"
-                                            size="sm"
-                                            className="justify-start px-0"
-                                            onClick={() => {
-                                                login()
-                                                setIsMenuOpen(false)
-                                            }}
-                                        >
-                                            Log In
-                                        </Button>
-                                        <Button
-                                            size="sm"
-                                            onClick={() => {
-                                                login()
-                                                setIsMenuOpen(false)
-                                            }}
-                                        >
-                                            Get Started
-                                        </Button>
-                                    </>
-                                )}
-                            </div>
+                            {!isAuthenticated && (
+                                <div className="flex flex-col space-y-2 pt-4 border-t">
+                                    <Button
+                                        variant="ghost"
+                                        size="sm"
+                                        className="justify-start px-0"
+                                        onClick={() => {
+                                            login()
+                                            setIsMenuOpen(false)
+                                        }}
+                                    >
+                                        Log In
+                                    </Button>
+                                    <Button
+                                        size="sm"
+                                        onClick={() => {
+                                            login()
+                                            setIsMenuOpen(false)
+                                        }}
+                                    >
+                                        Get Started
+                                    </Button>
+                                </div>
+                            )}
                         </div>
                     </motion.div>
                 )}
