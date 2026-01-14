@@ -74,25 +74,45 @@ export default function SpotDetailPage() {
                         </p>
                     </div>
 
-                    <div>
-                        <h3 className="text-lg font-semibold mb-3 flex items-center gap-2">
-                            <Users className="w-5 h-5 text-primary" /> Active Runners Here
-                        </h3>
-                        <div className="flex -space-x-3 overflow-hidden">
-                            {runners.slice(0, 3).map((r, i) => (
-                                <div key={i} className="inline-block h-10 w-10 rounded-full ring-2 ring-background bg-secondary flex items-center justify-center text-xs font-bold" title={r.name}>
-                                    {r.avatar}
+                    {/* Actions & Reviews */}
+                    <div className="space-y-6">
+                        <div className="flex gap-3">
+                            <Button className="flex-1" size="lg">
+                                <MapPin className="mr-2 h-4 w-4" /> Get Directions
+                            </Button>
+                            <Button variant="outline" size="lg">
+                                Share
+                            </Button>
+                        </div>
+
+                        {/* Reviews Section */}
+                        <div className="pt-6 border-t">
+                            <div className="flex items-center justify-between mb-4">
+                                <h3 className="text-lg font-semibold">Reviews (24)</h3>
+                                <Button variant="link" className="text-primary h-auto p-0">Write a Review</Button>
+                            </div>
+
+                            <div className="space-y-4">
+                                <div className="bg-muted/10 p-4 rounded-lg">
+                                    <div className="flex items-center justify-between mb-2">
+                                        <span className="font-semibold text-sm">Alex M.</span>
+                                        <div className="flex text-amber-500 text-xs"><Star className="w-3 h-3 fill-current" /><Star className="w-3 h-3 fill-current" /><Star className="w-3 h-3 fill-current" /><Star className="w-3 h-3 fill-current" /><Star className="w-3 h-3 fill-current" /></div>
+                                    </div>
+                                    <p className="text-sm text-muted-foreground">Great track for evening runs. Well lit and safe.</p>
                                 </div>
-                            ))}
-                            <div className="flex h-10 w-10 items-center justify-center rounded-full ring-2 ring-background bg-muted text-xs font-medium text-muted-foreground">
-                                +12
+                                <div className="bg-muted/10 p-4 rounded-lg">
+                                    <div className="flex items-center justify-between mb-2">
+                                        <span className="font-semibold text-sm">Sarah J.</span>
+                                        <div className="flex text-amber-500 text-xs"><Star className="w-3 h-3 fill-current" /><Star className="w-3 h-3 fill-current" /><Star className="w-3 h-3 fill-current" /><Star className="w-3 h-3 fill-current" /></div>
+                                    </div>
+                                    <p className="text-sm text-muted-foreground">Nice scenery but can get crowded on weekends.</p>
+                                </div>
                             </div>
                         </div>
-                        <Button className="mt-4 w-full md:w-auto">Check In Here</Button>
                     </div>
                 </div>
 
-                <div className="h-[400px] rounded-xl overflow-hidden border">
+                <div className="h-[300px] md:h-[400px] rounded-xl overflow-hidden border">
                     <Map center={spot.location as [number, number]} markers={mapMarkers} zoom={15} />
                 </div>
             </div>

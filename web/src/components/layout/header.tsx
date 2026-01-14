@@ -72,6 +72,11 @@ export function Header() {
                                         <button className="w-full text-left px-4 py-2 text-sm hover:bg-muted flex items-center gap-2">
                                             <User className="w-4 h-4" /> Profile
                                         </button>
+                                        <Link href="/friends">
+                                            <button className="w-full text-left px-4 py-2 text-sm hover:bg-muted flex items-center gap-2">
+                                                <Users className="w-4 h-4" /> Friends
+                                            </button>
+                                        </Link>
                                         <button className="w-full text-left px-4 py-2 text-sm hover:bg-muted flex items-center gap-2">
                                             <Settings className="w-4 h-4" /> Settings
                                         </button>
@@ -146,6 +151,15 @@ export function Header() {
                                 >
                                     Find Spots
                                 </Link>
+                                {isAuthenticated && (
+                                    <Link
+                                        href="/friends"
+                                        className="text-sm font-medium transition-colors hover:text-primary"
+                                        onClick={() => setIsMenuOpen(false)}
+                                    >
+                                        Friends
+                                    </Link>
+                                )}
                             </nav>
                             <div className="flex flex-col space-y-2 pt-4 border-t">
                                 {isAuthenticated && user ? (
