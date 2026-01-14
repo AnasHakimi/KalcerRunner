@@ -69,7 +69,7 @@
   --color-border: hsl(var(--border));
   --color-input: hsl(var(--input));
   --color-ring: hsl(var(--ring));
-  
+
   --radius-lg: var(--radius);
   --radius-md: calc(var(--radius) - 2px);
   --radius-sm: calc(var(--radius) - 4px);
@@ -83,4 +83,12 @@ body {
   color: var(--color-foreground);
   font-family: var(--font-sans), system-ui, sans-serif;
   @apply antialiased selection:bg-primary/20 selection:text-primary;
+}
+
+/* Global Container Fix */
+.container {
+  margin-inline: auto;
+  padding-inline: 1rem;
+  max-width: 1400px;
+  /* Constraint for 2k/4k screens */
 }
