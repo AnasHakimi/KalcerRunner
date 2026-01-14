@@ -4,6 +4,7 @@ import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Users, MapPin, Trophy } from "lucide-react"
 import { motion } from "framer-motion"
+import { LiveBackground } from "@/components/ui/live-background" // Added Import
 
 export default function Home() {
   return (
@@ -11,8 +12,7 @@ export default function Home() {
       {/* Hero Section */}
       <section className="w-full py-20 md:py-32 xl:py-48 bg-background relative overflow-hidden">
         {/* Background gradient decoration */}
-        <div className="absolute top-0 right-0 -z-10 h-[300px] w-[300px] md:h-[500px] md:w-[500px] rounded-full bg-primary/10 blur-3xl opacity-50 md:opacity-100" />
-        <div className="absolute bottom-0 left-0 -z-10 h-[300px] w-[300px] md:h-[500px] md:w-[500px] rounded-full bg-blue-500/10 blur-3xl opacity-50 md:opacity-100" />
+        <LiveBackground />
 
         <div className="container px-4 md:px-6">
           <div className="flex flex-col items-center space-y-4 text-center">
